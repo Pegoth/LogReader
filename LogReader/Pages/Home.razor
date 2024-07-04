@@ -1,0 +1,44 @@
+﻿@page "/"
+@inject ILogger<Home> Logger
+
+<div class="h-100 fixed-vertical-scroll">
+    <Card class="sticky-top top-0" Title="Options">
+        <div class="mb-1">
+            <label for="logFile" class="form-label">Log file</label>
+            <InputFile id="logFile" class="form-control" OnChange="FileSelected"></InputFile>
+        </div>
+        <label for="search" class="form-label">Search</label>
+        <div class="input-group">
+            <input type="text" id="search" class="form-control" @bind="Search"/>
+        </div>
+    </Card>
+    <Virtualize TItem="LogEntry" Items="_logs.Where(IsFiltered).ToArray()">
+        <div class="p-1" style="@(context.Expanded ? "border: 1px solid black;" : "")">
+            <div class="row" style="color: @context.Color;" @onclick="() => context.Expanded = !context.Expanded">
+                <div class="col-auto">
+                    @context.Timestamp?.ToString("yyyy-MM-dd hh:mm:ss.fff")
+                </div>
+                <div class="col-auto" style="width: 100px;">
+                    @context.Level
+                </div>
+                <div class="col @(context.Expanded ? "" : "ellipsis")">
+                    @context.RenderedMessage
+                </div>
+            </div>
+            @if (context.Expanded)
+            {
+                <hr/>
+
+                @if (context.Exception != null)
+                {
+                    <label for="exception" class="fw-bold form-label">Exception</label>
+                    <textarea id="exception" class="w-100" style="resize: none; border: none;" rows="@GetNumLines(context.Exception)">@context.Exception</textarea>
+                    <hr/>
+                }
+
+                <label for="raw" class="fw-bold form-label">Raw log entry</label>
+                <textarea id="raw" class="w-100" style="resize: none; border: none;" rows="@GetNumLines(context.Raw)">@context.Raw</textarea>
+            }
+        </div>
+    </Virtualize>
+</div>

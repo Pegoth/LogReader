@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "LogReader": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
