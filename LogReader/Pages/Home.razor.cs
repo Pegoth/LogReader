@@ -11,6 +11,9 @@ public partial class Home
 {
     private readonly List<LogEntry> _logs = [];
 
+    private string?   _search;
+    private string[]? _searchTokens;
+
     private string? Search
     {
         get => _search;
@@ -19,7 +22,7 @@ public partial class Home
             if (_search == value)
                 return;
 
-            _search       = value;
+            _search = value;
             _searchTokens = value is null
                                 ? null
                                 : Regex.Split(value, "(?<=^[^\"]*(?:\"[^\"]*\"[^\"]*)*) (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
@@ -27,9 +30,6 @@ public partial class Home
                                        .ToArray();
         }
     }
-
-    private string?   _search;
-    private string[]? _searchTokens;
 
     private async Task FileSelected(InputFileChangeEventArgs e)
     {
@@ -84,10 +84,10 @@ public partial class Home
                     var entryLevelValue = LevelValue(entry.Level);
                     switch (op)
                     {
-                        case "<" when entryLevelValue >= levelValue:  return false;
-                        case "<=" when entryLevelValue > levelValue:  return false;
-                        case ">" when entryLevelValue <= levelValue:  return false;
-                        case ">=" when entryLevelValue < levelValue:  return false;
+                        case "<" when entryLevelValue >= levelValue: return false;
+                        case "<=" when entryLevelValue > levelValue: return false;
+                        case ">" when entryLevelValue <= levelValue: return false;
+                        case ">=" when entryLevelValue < levelValue: return false;
                         case "==" when entryLevelValue != levelValue: return false;
                         case "!=" when entryLevelValue == levelValue: return false;
                     }
@@ -96,10 +96,10 @@ public partial class Home
                 {
                     switch (op)
                     {
-                        case "<" when entry.Timestamp >= date:  return false;
-                        case "<=" when entry.Timestamp > date:  return false;
-                        case ">" when entry.Timestamp <= date:  return false;
-                        case ">=" when entry.Timestamp < date:  return false;
+                        case "<" when entry.Timestamp >= date: return false;
+                        case "<=" when entry.Timestamp > date: return false;
+                        case ">" when entry.Timestamp <= date: return false;
+                        case ">=" when entry.Timestamp < date: return false;
                         case "==" when entry.Timestamp != date: return false;
                         case "!=" when entry.Timestamp == date: return false;
                     }
@@ -126,43 +126,45 @@ public partial class Home
 
     private static int LevelValue(string? level) => level?.ToLower() switch
     {
-        "verb"        => 0,
-        "verbose"     => 0,
-        "trace"       => 0,
-        "deb"         => 1,
-        "debug"       => 1,
-        "inf"         => 2,
-        "info"        => 2,
+        "verb" => 0,
+        "verbose" => 0,
+        "trace" => 0,
+        "deb" => 1,
+        "debug" => 1,
+        "inf" => 2,
+        "info" => 2,
         "information" => 2,
-        "warn"        => 3,
-        "warning"     => 3,
-        "err"         => 4,
-        "error"       => 4,
-        "fatal"       => 5,
-        "crit"        => 5,
-        "critical"    => 5,
-        _             => -1
+        "warn" => 3,
+        "warning" => 3,
+        "err" => 4,
+        "error" => 4,
+        "fatal" => 5,
+        "crit" => 5,
+        "critical" => 5,
+        _ => -1
     };
 
     private class LogEntry(JObject jobj)
     {
-        public DateTime? Timestamp       { get; } = jobj["Timestamp"]?.Value<DateTime?>();
-        public string?   Level           { get; } = jobj["Level"]?.Value<string?>();
-        public string?   RenderedMessage { get; } = jobj["RenderedMessage"]?.Value<string?>();
-        public string?   Exception       { get; } = jobj["Exception"]?.Value<string?>();
-        public string    Raw             { get; } = jobj.ToString(Formatting.Indented);
-        public bool      Expanded        { get; set; }
+        public DateTime? Timestamp         { get; } = jobj["Timestamp"]?.Value<DateTime?>() ?? jobj["@t"]?.Value<DateTime?>();
+        public string?   Level             { get; } = jobj["Level"]?.Value<string?>() ?? jobj["@l"]?.Value<string?>();
+        public string?   RenderedMessage   { get; } = jobj["RenderedMessage"]?.Value<string?>() ?? jobj["@m"]?.Value<string?>();
+        public string?   Exception         { get; } = jobj["Exception"]?.Value<string?>() ?? jobj["@x"]?.Value<string?>();
+        public string    Raw               { get; } = jobj.ToString(Formatting.Indented);
+        public bool      Expanded          { get; set; }
+        public bool      ExceptionExpanded { get; set; } = true;
+        public bool      RawExpanded       { get; set; }
 
         public string Color => Level switch
         {
-            "Info"        => "orange",
+            "Info" => "orange",
             "Information" => "orange",
-            "Warn"        => "Tomato",
-            "Warning"     => "Tomato",
-            "Error"       => "red",
-            "Fatal"       => "red",
-            "Critical"    => "red",
-            _             => "black"
+            "Warn" => "Tomato",
+            "Warning" => "Tomato",
+            "Error" => "red",
+            "Fatal" => "red",
+            "Critical" => "red",
+            _ => "black"
         };
     }
 }

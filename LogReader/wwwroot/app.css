@@ -1,68 +1,52 @@
 html,
 body,
 #app {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  width: 100vw;
-  height: 100vh;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100vh;
+    width: 100vw;
 }
 
-h1:focus {
-  outline: none;
-}
+h1:focus { outline: none; }
 
 a,
-.btn-link {
-  color: #0071c1;
-}
+.btn-link { color: #0071c1; }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    color: #fff;
 }
 
-.valid.modified:not([type=checkbox]) {
-  outline: 1px solid #26b050;
-}
+.valid.modified:not([type=checkbox]) { outline: 1px solid #26b050; }
 
-.invalid {
-  outline: 1px solid red;
-}
+.invalid { outline: 1px solid red; }
 
-.validation-message {
-  color: red;
-}
+.validation-message { color: red; }
 
 #blazor-error-ui {
-  background: lightyellow;
-  bottom: 0;
-  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
-  display: none;
-  left: 0;
-  padding: 0.6rem 1.25rem 0.7rem 1.25rem;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
 
 #blazor-error-ui .dismiss {
-  cursor: pointer;
-  position: absolute;
-  right: 0.75rem;
-  top: 0.5rem;
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
 }
 
-.w-1 {
-    width: 1px;
-}
+.w-1 { width: 1px; }
 
-.text-big {
-    font-size: 1.5em;
-}
+.text-big { font-size: 1.5em; }
 
-.card {
-    border-radius: 0;
-}
+.card { border-radius: 0; }
 
 .ellipsis {
     overflow: hidden;
@@ -70,6 +54,4 @@ a,
     white-space: nowrap;
 }
 
-td.ellipsis {
-    max-width: 0;
-}
+td.ellipsis { max-width: 0; }

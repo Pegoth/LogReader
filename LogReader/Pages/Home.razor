@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject ILogger<Home> Logger
+@inject ILogger<Home>         Logger
 
 <div class="h-100 fixed-vertical-scroll">
     <Card class="sticky-top top-0" Title="Options">
@@ -31,13 +31,24 @@
 
                 @if (context.Exception != null)
                 {
-                    <label for="exception" class="fw-bold form-label">Exception</label>
-                    <textarea id="exception" class="w-100" style="resize: none; border: none;" rows="@GetNumLines(context.Exception)">@context.Exception</textarea>
+                    <div class="w-100" @onclick="() => context.ExceptionExpanded = !context.ExceptionExpanded">
+                        <label for="exception" class="fw-bold form-label">Exception</label>
+                    </div>
+                    @if (context.ExceptionExpanded)
+                    {
+                        <textarea id="exception" class="w-100" style="border: none; resize: none;" rows="@GetNumLines(context.Exception)">@context.Exception</textarea>
+                    }
+
                     <hr/>
                 }
 
-                <label for="raw" class="fw-bold form-label">Raw log entry</label>
-                <textarea id="raw" class="w-100" style="resize: none; border: none;" rows="@GetNumLines(context.Raw)">@context.Raw</textarea>
+                <div class="w-100" @onclick="() => context.RawExpanded = !context.RawExpanded">
+                    <label for="raw" class="fw-bold form-label">Raw log entry</label>
+                </div>
+                @if (context.RawExpanded)
+                {
+                    <textarea id="raw" class="w-100" style="border: none; resize: none;" rows="@GetNumLines(context.Raw)">@context.Raw</textarea>
+                }
             }
         </div>
     </Virtualize>
