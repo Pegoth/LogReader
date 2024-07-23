@@ -99,7 +99,7 @@ You can use the following operators to filter for `Timestamp` or `Level` (case-i
 
 #### Supported date formats
 
-Anything that can be parsed by `DateTime.Parse`. Don't forget to use double quites (`"`) if you want to place spaces between date and time.
+Anything that can be parsed by `DateTime.Parse`. Don't forget to use double quotes (`"`) if you want to place spaces between date and time.
 Note that if you only use time it will parse it as the current date + the given time, not any date.
 
 ##### Examples
