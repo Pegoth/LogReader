@@ -16,7 +16,7 @@
         <div class="p-1" style="@(context.Expanded ? "border: 1px solid black;" : "")">
             <div class="row" style="color: @context.Color;" @onclick="() => context.Expanded = !context.Expanded">
                 <div class="col-auto">
-                    @context.Timestamp?.ToString("yyyy-MM-dd hh:mm:ss.fff")
+                    @context.Timestamp?.ToString("yyyy-MM-dd HH:mm:ss.fff")
                 </div>
                 <div class="col-auto" style="width: 100px;">
                     @context.Level
