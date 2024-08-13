@@ -1,24 +1,35 @@
 ﻿@page "/"
 @inject ILogger<Home>         Logger
+@inject IJSRuntime            Runtime
 
 <div class="h-100 fixed-vertical-scroll">
-    <Card class="sticky-top top-0" Title="Options">
-        <div class="mb-1">
-            <label for="logFile" class="form-label">Log file</label>
-            <InputFile id="logFile" class="form-control" OnChange="FileSelected"></InputFile>
+    <div class="sticky-top top-0 bg-body pb-2">
+        <Card Title="Source">
+            <ExtraButtonsFragment>
+                <button class="btn btn-sm btn-secondary col-auto" onclick="event.stopPropagation();event.preventDefault();toggleDarkMode();">Toggle dark mode</button>
+            </ExtraButtonsFragment>
+            <ChildContent>
+                <div class="input-group">
+                    <span class="input-group-text">Load from file</span>
+                    <input type="text" class="form-control" id="logFile" @bind="_logFile" @onkeypress="LogFileKeypress" onkeyup="event.stopPropagation()" disabled="@_loading"/>
+                    <button class="btn btn-secondary" @onclick="ShowFileSelect" disabled="@_loading">Browse</button>
+                    <button class="btn btn-primary" @onclick="LoadFile" disabled="@_loading">Load</button>
+                </div>
+                <div class="mb-2 text-center mt-2">or</div>
+                <button class="btn btn-primary w-100" @onclick="LoadFromClipboard" disabled="@_loading">Load from clipboard</button>
+            </ChildContent>
+        </Card>
+        <div class="m-2 mb-0">
+            <input type="text" id="search" class="form-control" placeholder="Search" @bind="Search" disabled="@_loading"/>
         </div>
-        <label for="search" class="form-label">Search</label>
-        <div class="input-group">
-            <input type="text" id="search" class="form-control" @bind="Search"/>
-        </div>
-    </Card>
+    </div>
     <Virtualize TItem="LogEntry" Items="_logs.Where(IsFiltered).ToArray()">
         <div class="p-1" style="@(context.Expanded ? "border: 1px solid black;" : "")">
             <div class="row" style="color: @context.Color;" @onclick="() => context.Expanded = !context.Expanded">
                 <div class="col-auto">
                     @context.Timestamp?.ToString("yyyy-MM-dd HH:mm:ss.fff")
                 </div>
-                <div class="col-auto" style="width: 100px;">
+                <div class="col-auto@(context.IsBold ? " fw-bold" : "")" style="width: 100px;">
                     @context.Level
                 </div>
                 <div class="col @(context.Expanded ? "" : "ellipsis")">
@@ -36,7 +47,7 @@
                     </div>
                     @if (context.ExceptionExpanded)
                     {
-                        <textarea id="exception" class="w-100" style="border: none; resize: none;" rows="@GetNumLines(context.Exception)">@context.Exception</textarea>
+                        <textarea id="exception" class="w-100" style="border: none; resize: none;" rows="@GetRowCount(context.Exception)" wrap="off" onkeyup="event.stopPropagation()">@context.Exception</textarea>
                     }
 
                     <hr/>
@@ -47,7 +58,7 @@
                 </div>
                 @if (context.RawExpanded)
                 {
-                    <textarea id="raw" class="w-100" style="border: none; resize: none;" rows="@GetNumLines(context.Raw)">@context.Raw</textarea>
+                    <textarea id="raw" class="w-100" style="border: none; resize: none;" rows="@GetRowCount(context.Raw)" wrap="off" onkeyup="event.stopPropagation()">@context.Raw</textarea>
                 }
             }
         </div>
